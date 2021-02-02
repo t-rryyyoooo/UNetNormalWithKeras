@@ -1,7 +1,7 @@
 #!/bin/bash
 
 readonly data_dir="/mnt/data/Abdomen"
-readonly model_path="model_path"
+readonly model_path="data/3DUNetModel.json"
 readonly image_name="imaging_resampled.nii.gz"
 readonly label_name="segmentation_resampled.nii.gz"
 readonly mask_name="mask_resampled.mha"
@@ -29,9 +29,9 @@ do
 
 
  # Cutting image.
- #python3 extractPatchComposed.py ${image_path} ${model_path} ${save_image_path} ${save_image_text_path} --mask ${mask_path}
+ python3 extractPatchComposed.py ${image_path} ${model_path} ${save_image_path} ${save_image_text_path} --mask ${mask_path}
 
  # Cutting label.
- #python3 extractPatchComposed.py ${label_path} ${model_path} ${save_label_path} ${save_label_text_path} --mask ${mask_path}
+ python3 extractPatchComposed.py ${label_path} ${model_path} ${save_label_path} ${save_label_text_path} --mask ${mask_path}
 
 done

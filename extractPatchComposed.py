@@ -1,18 +1,16 @@
 import sys
 import os
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from itertools import product
 import numpy as np
 import argparse
 import yaml
 import SimpleITK as sitk
 from pathlib import Path
-from keras.utils import to_categorical
-
-
+from tensorflow.compat.v1.keras.utils import to_categorical
+import json
 
 args = None
-
 
 def ParseArgs():
     parser = argparse.ArgumentParser()
@@ -43,9 +41,10 @@ def createParentPath(filepath):
 
 print("loading 3D U-net model", args.modelfile, end="...", flush=True)
 with open(args.modelfile) as f:
-    yamlobj = yaml.load(f)
-    model = tf.keras.models.model_from_yaml(yaml.dump(yamlobj))
-    modelversion = yamlobj["unet_version"] if "unet_version" in yamlobj else "v1"
+    f_read = f.read()
+    model = tf.keras.models.model_from_json(f_read)
+    #yamlobj = yaml.load(f, Loader=yaml.FullLoader)
+    #model = tf.keras.models.model_from_yaml(yaml.dump(yamlobj))
 
 
 

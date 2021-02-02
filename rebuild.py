@@ -3,7 +3,7 @@ import os
 import numpy as np
 import tensorflow.compat.v1 as tf
 import SimpleITK as sitk
-from tensorflow.python.keras import layers as klayers
+from tensorflow.compat.v1.keras import layers as klayers
 import matplotlib.pyplot as plt
 from tensorflow import name_scope
 import argparse
@@ -13,17 +13,17 @@ import random
 import yaml
 import time
 import csv
-import tensorflow.python.keras.backend as K
+import tensorflow.compat.v1.keras.backend as K
 
 args = None
 
 def ParseArgs():
     parser = argparse.ArgumentParser(description='This is a build 3D_U_Net program')
     parser.add_argument("datafile", help="Input Dataset file(stracture:data_path label_path)")
-    parser.add_argument("-o", "--outfile", help="Output model structure file in YAML format (*.yml).")
+    parser.add_argument("-o", "--outfile", help="Output model structure file in JSON format (*.json).")
     parser.add_argument("-t","--testfile", help="Input Dataset file for validation (stracture:data_path label_path)")
     parser.add_argument("-p", "--patchsize", help="Patch size. (ex. 44x44x28)", default="44x44x28")
-    parser.add_argument("-c", "--nclasses", help="Number of classes of segmentaiton including background.", default=3, type=int)
+    parser.add_argument("-c", "--nclasses", help="Number of classes of segmentaiton including background.", default=14, type=int)
     parser.add_argument("-e", "--epochs", help="Number of epochs", default=30, type=int)
     parser.add_argument("-b", "--batchsize", help="Batch size*(Warning:memory use a lot)", default=2, type=int)#orginal default:3
     parser.add_argument("-l", "--learningrate", help="Learning rate", default=1e-4, type=float)
@@ -41,7 +41,7 @@ def CreateConv3DBlock(x, filters, n = 2, use_bn = True, apply_pooling = True, na
     for i in range(n):
         x = klayers.Conv3D(filters[i], (3,3,3), padding='valid', name=name+'_conv'+str(i+1))(x)
         if use_bn:
-            x = klayers.BatchNormalization(name=name+'_BN'+str(i+1))(x)
+            x = klayers.BatchNormalization(name=name+'_BN'+str(i+1), axis=-1)(x)
         x = klayers.Activation('relu', name=name+'_relu'+str(i+1))(x)
 
     convresult = x
@@ -252,8 +252,10 @@ def main(_):
     if args.outfile is not None:
         with open(args.outfile, 'w') as f:
             print("Saving...")
-            yamlobj = yaml.load(model.to_yaml(), Loader=yaml.FullLoader)
-            yaml.dump(yamlobj, f)
+            yamlobj = model.to_json()
+            f.write(yamlobj)
+            #yamlobj = yaml.load(model.to_yaml(), Loader=yaml.FullLoader)
+            #yaml.dump(yamlobj, f)
             print("Done.")
             
     #get padding size
