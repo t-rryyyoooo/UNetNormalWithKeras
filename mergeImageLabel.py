@@ -9,9 +9,9 @@ import yaml
 
 def ParseArgs():
     parser = argparse.ArgumentParser()
-    parser.add_argument("textfile1", help="text file1 you want to marge")
-    parser.add_argument("textfile2", help="text file2 you want to marge")
-    parser.add_argument("margefile", help="output")
+    parser.add_argument("textfile1", help="text file1 you want to merge")
+    parser.add_argument("textfile2", help="text file2 you want to merge")
+    parser.add_argument("mergefile", help="output")
     args = parser.parse_args()
     return args
 
@@ -38,6 +38,7 @@ cal2 = list(map(lambda x: x.strip(), cal2))
 # タブ区切りで並べたリストを作成
 lines = ["{0}\t{1}".format(line1, line2) for line1, line2 in zip(cal1, cal2)]
 
+os.makedirs(os.path.dirname(args.mergefile), exist_ok=True)
 for line in lines:
-    save_file(args.margefile,line)
+    save_file(args.mergefile,line)
 

@@ -10,12 +10,12 @@ for number in ${num_array[@]}
 do
  image_text_path="${image_text_dir}/case_${number}${suffix}"
  label_text_path="${label_text_dir}/case_${number}${suffix}"
- save_path="${save_dir}/case_${number}/${suffix}"
+ save_path="${save_dir}/case_${number}${suffix}"
 
  echo "image_text_path:${image_text_path}"
  echo "label_text_path:${label_text_path}"
  echo "save_path:${save_path}"
 
- #python3 merge.py ${image_text_path} ${label_text_path} ${save_path}
+ python3 mergeImageLabel.py ${image_text_path} ${label_text_path} ${save_path}
 
 done
