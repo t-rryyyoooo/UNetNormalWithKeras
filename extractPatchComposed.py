@@ -88,7 +88,8 @@ num_totalpatches = len(totalpatches)
 
 image_padded_array=sitk.GetArrayFromImage(image_padded)
 
-array_categorical=to_categorical(image_padded_array)
+#array_categorical=to_categorical(image_padded_array)
+array_categorical = image_padded_array
 
 i = 1
 j = 1
@@ -111,7 +112,8 @@ for iz in range(bb[4], bb[5], step[2]):
 
             #patchimage = image_padded[ii[0]:(ii[0]+ips[0]), ii[1]:(ii[1]+ips[1]), ii[2]:(ii[2]+ips[2])]
 
-            patchimagearray = array_categorical[ii[2]:(ii[2]+ips[2]), ii[1]:(ii[1]+ips[1]), ii[0]:(ii[0]+ips[0]), :]
+            #patchimagearray = array_categorical[ii[2]:(ii[2]+ips[2]), ii[1]:(ii[1]+ips[1]), ii[0]:(ii[0]+ips[0]), :]
+            patchimagearray = array_categorical[ii[2]:(ii[2]+ips[2]), ii[1]:(ii[1]+ips[1]), ii[0]:(ii[0]+ips[0])]
             print(patchimagearray.shape)
             #pavec = model.predict_on_batch(patchimagearray)
             #segmentation = np.argmax(pavec, axis=-1).astype(np.uint8)
@@ -137,6 +139,9 @@ for iz in range(bb[4], bb[5], step[2]):
             print("done")
             j = j + 1
 
+
+os.makedirs(os.path.dirname(args.listpath), exist_ok=True)
+print(args.listpath)
 fo = open(args.listpath, "w")
 fo.writelines(arr_path)
 fo.close()
