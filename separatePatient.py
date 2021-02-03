@@ -9,7 +9,7 @@ def parseArgs():
     parser.add_argument("slicePath", help="~/Desktop/data/patch/256_256_3/path")
     parser.add_argument("savePath", help="~/Desktop/data/textList/original")
     parser.add_argument("--training", nargs="*")
-    parser.add_argument("--valiation", nargs="*")
+    parser.add_argument("--validation", nargs="*")
     parser.add_argument("--test", nargs="*")
 
     args = parser.parse_args()
@@ -18,6 +18,7 @@ def parseArgs():
 
 def main(args):
     savePath = os.path.expanduser(args.savePath)
+    os.makedirs(savePath, exist_ok=True)
 
     for x in range(30):
         sx = str(x).zfill(2)
@@ -29,9 +30,9 @@ def main(args):
             os.makedirs(savePath, exist_ok = True)
 
         if os.path.isfile(slicePath):
-            if sx in args.testing:
-                f = "testing"
-                list_file(slicePath, savePath + "/testing.txt")
+            if sx in args.test:
+                f = "test"
+                list_file(slicePath, savePath + "/test.txt")
             if sx in args.training:
                 f = "training"
                 list_file(slicePath, savePath + "/training.txt")
@@ -39,7 +40,7 @@ def main(args):
                 f = "validation"
                 list_file(slicePath, savePath + "/validation.txt")
         
-            print("case_00" + sx + " to " + f)
+            print("case_" + sx + " to " + f)
         else:
             print("Loading Error. " )
             sys.exit()
